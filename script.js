@@ -13,6 +13,14 @@ const tryAgainBtn = document.getElementById('try-again');
 const shareBtn = document.getElementById('share-result');
 const restartBtn = document.getElementById('restart-btn');
 const themeToggle = document.getElementById('theme-toggle');
+// Nav & extra modals
+const navAbout = document.getElementById('nav-about');
+const navStats = document.getElementById('nav-stats');
+const aboutModal = document.getElementById('about-modal');
+const statsModal = document.getElementById('stats-modal');
+const aboutClose = document.getElementById('about-close');
+const statsClose = document.getElementById('stats-close');
+const statsList = document.getElementById('stats-list');
 
 // Test configuration
 const TEST_DURATION = 60; // seconds
@@ -46,6 +54,53 @@ function generateRandomWords(count) {
     return arr.join(' ');
 }
 
+// Generic modal helpers
+function openModal(modalEl) {
+    modalEl.style.display = 'flex';
+    setTimeout(() => {
+        const content = modalEl.querySelector('.modal-content');
+        if (content) content.classList.add('fade-in');
+    }, 10);
+}
+function closeModal(modalEl) {
+    const content = modalEl.querySelector('.modal-content');
+    if (content) content.classList.remove('fade-in');
+    setTimeout(() => { modalEl.style.display = 'none'; }, 150);
+}
+
+// Render session history into stats list
+function renderStatsList() {
+    if (!statsList) return;
+    const results = JSON.parse(localStorage.getItem('typingTestResults') || '[]').slice().reverse();
+    if (results.length === 0) {
+        statsList.innerHTML = '<p style="color: var(--secondary-color);">No sessions yet. Finish a test to see your history here.</p>';
+        return;
+    }
+    const rows = results.map((r, idx) => {
+        const d = new Date(r.date);
+        const dateStr = d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: '2-digit' });
+        const timeStr = d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        const chars = `${r.correctChars || 0} / ${r.totalTypedChars || 0}`;
+        return `
+            <div class="result-stat" style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;">
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <strong style="min-width:40px;">#${results.length - idx}</strong>
+                    <div>
+                        <div style="font-weight:600; color: var(--text-color);">${dateStr} • ${timeStr}</div>
+                        <div style="color: var(--secondary-color); font-size:13px;">Session summary</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:14px;">
+                    <span><strong>${r.wpm}</strong> WPM</span>
+                    <span><strong>${r.accuracy}%</strong> Acc</span>
+                    <span><strong>${r.consistency}%</strong> Cons</span>
+                    <span><strong>${chars}</strong> Chars</span>
+                </div>
+            </div>`;
+    }).join('');
+    statsList.innerHTML = rows;
+}
+
 // Initialize the typing test
 function init() {
     loadTheme();
@@ -61,6 +116,32 @@ function setupEventListeners() {
     shareBtn.addEventListener('click', shareResults);
     restartBtn.addEventListener('click', startNewTest);
     themeToggle.addEventListener('click', toggleTheme);
+
+    // About modal
+    if (navAbout && aboutModal) {
+        navAbout.addEventListener('click', (e) => { e.preventDefault(); openModal(aboutModal); });
+    }
+    if (aboutClose && aboutModal) {
+        aboutClose.addEventListener('click', () => closeModal(aboutModal));
+    }
+    // Stats modal
+    if (navStats && statsModal) {
+        navStats.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderStatsList();
+            openModal(statsModal);
+        });
+    }
+    if (statsClose && statsModal) {
+        statsClose.addEventListener('click', () => closeModal(statsModal));
+    }
+    // Click outside to close for extra modals
+    [aboutModal, statsModal].forEach(modal => {
+        if (!modal) return;
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal(modal);
+        });
+    });
 }
 
 // Start a new typing test
