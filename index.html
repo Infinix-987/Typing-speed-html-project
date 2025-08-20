@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeFlow | Typing Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-links">
+                <a href="#" class="logo">TypeFlow</a>
+                <a href="#" class="active">Test</a>
+                <a href="#" id="nav-about">About</a>
+                <a href="#" id="nav-stats">Stats</a>
+            </div>
+            <div class="nav-actions">
+                <button id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <div class="test-container">
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-value" id="wpm">0</span>
+                    <span class="stat-label">WPM</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="accuracy">100</span>
+                    <span class="stat-label">% Accuracy</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="consistency">100</span>
+                    <span class="stat-label">% Consistency</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="time">60</span>
+                    <span class="stat-label">Seconds</span>
+                </div>
+            </div>
+
+            <div class="typing-test">
+                <div id="words"></div>
+                <div class="input-container">
+                    <input type="text" id="input" autocomplete="off" spellcheck="false" placeholder="Start typing to begin...">
+                    <button id="restart-btn">Restart</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-modal" id="result-modal">
+            <div class="modal-content">
+                <h2>Test Complete!</h2>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span class="result-value" id="result-wpm">0</span>
+                        <span class="result-label">WPM</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-value" id="result-accuracy">0</span>
+                        <span class="result-label">Accuracy</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-value" id="result-consistency">0</span>
+                        <span class="result-label">Consistency</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="result-value" id="result-characters">0</span>
+                        <span class="result-label">Characters</span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button id="try-again">Try Again</button>
+                    <button id="share-result">Share</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Modal -->
+        <div class="result-modal" id="about-modal">
+            <div class="modal-content">
+                <h2>About</h2>
+                <p style="margin: 10px 0 0; color: var(--secondary-color);">
+                    this page if for testing a learning not for comertial use
+                </p>
+                <div class="result-actions" style="justify-content:center; margin-top:24px;">
+                    <button id="about-close">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Modal -->
+        <div class="result-modal" id="stats-modal">
+            <div class="modal-content" style="max-width: 860px;">
+                <h2>Session History</h2>
+                <div id="stats-list" style="margin-top:20px; text-align:left; overflow:auto; max-height:50vh;"></div>
+                <div class="result-actions" style="justify-content:center; margin-top:24px;">
+                    <button id="stats-close">Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Created with ❤️</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
